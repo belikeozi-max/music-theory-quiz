@@ -1,0 +1,311 @@
+@page "/play"
+@using System.Linq
+@using Microsoft.AspNetCore.Components.Web
+@using Radzen
+@using Radzen.Blazor
+@using Microsoft.AspNetCore.Components
+@using MusicTheoryTrainerBlazor.Services
+@inject SessionStats Stats
+
+<div class="tt-bookStage">
+    <div class="tt-bookFrame @(isFlipping ? "flipping-forward" : "")">
+        
+        <div class="tt-spine"></div>
+
+        <div class="tt-page tt-left">
+            <div class="tt-pageInner">
+                <h1 style="font-family: 'Georgia', serif; color: #3d2b1f; border-bottom: 3px double #8b4513; margin-bottom: 5px;">Theory Trials</h1>
+                <p style="font-size: 0.8rem; letter-spacing: 2px; color: #5d4037; text-transform: uppercase;">The Scholar's Ledger</p>
+                
+                <div style="margin-top: 50px;">
+                    @if (state == GameState.Menu)
+                    {
+                        <h3 style="color: #3d2b1f;">Instructions</h3>
+                        <p style="line-height: 1.8; color: #3d2b1f;">Welcome, Apprentice. Use the buttons or your keyboard to answer the musical riddles. A perfect streak brings honor to the conservatory.</p>
+                    }
+                    else
+                    {
+                        <div style="background: rgba(0,0,0,0.03); padding: 20px; border: 1px dashed rgba(139,69,19,0.3);">
+                            <div style="font-size: 1.1rem; margin-bottom: 10px; color: #8b4513; font-weight: bold;">Current Vitals</div>
+                            <div style="display: grid; gap: 8px; font-family: 'Georgia', serif;">
+                                <div>❤ Health: @lives</div>
+                                <div>★ Mastery: @level</div>
+                                <div>🖋 Run Score: @runScore</div>
+                                <div>🔥 Best Streak: @bestStreak</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <div style="position: absolute; bottom: 40px; left: 40px; opacity: 0.15; font-size: 5rem; pointer-events: none;">𝄢</div>
+            </div>
+        </div>
+
+        <div class="tt-page tt-right">
+            <div class="tt-pageInner">
+                @if (state == GameState.Menu)
+                {
+                    <h2 style="font-family: 'Georgia', serif; color: #3d2b1f;">Select Quest</h2>
+                    
+                    <div style="margin-top: 30px;">
+                        <label style="color: #8b4513; font-weight: bold; font-size: 0.9rem;">CHALLENGE LEVEL</label>
+                        <select @bind="difficulty" class="adventure-input">
+                            <option value="@Difficulty.Easy">Apprentice (Natural Notes)</option>
+                            <option value="@Difficulty.Medium">Bard (Sharps & Flats)</option>
+                            <option value="@Difficulty.Hard">Maestro (All Keys)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <label style="color: #8b4513; font-weight: bold; font-size: 0.9rem;">ROUND LENGTH</label>
+                        <select @bind="roundLength" class="adventure-input">
+                            <option value="10">A Short Prelude (10)</option>
+                            <option value="25">A Standard Sonata (25)</option>
+                            <option value="50">A Grand Symphony (50)</option>
+                        </select>
+                    </div>
+
+                    <button class="adventure-btn" style="width: 100%; margin-top: 40px; height: 60px; font-size: 1.2rem;" @onclick="StartArcade">Begin the Trials</button>
+                }
+                else if (state == GameState.GameOver)
+                {
+                    <h2 style="font-family: 'Georgia', serif; color: #5c1919;">Trial Ended</h2>
+                    <p style="font-size: 1.2rem; margin: 20px 0;">Your ink has run dry. You managed to solve <strong>@runScore</strong> challenges before the end.</p>
+                    
+                    <button class="adventure-btn" style="width: 100%;" @onclick="StartArcade">Restart Journey</button>
+                    <button class="adventure-btn" style="width: 100%; margin-top: 10px; background: #3d2b1f !important;" @onclick="BackToMenu">Back to Menu</button>
+                }
+                else
+                {
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px;">
+                        <span style="color: #8b4513; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">Quest: @ModeLabel()</span>
+                        <span style="font-size: 0.8rem; color: #5d4037;">Page @roundIndex of @roundLength</span>
+                    </div>
+
+                    <div class="qtext" style="font-size: 28px; margin: 35px 0; color: #1a120b; line-height: 1.3;">@questionText</div>
+                    
+                    @if (!string.IsNullOrWhiteSpace(hintText))
+                    {
+                        <div style="color: #5d4037; font-style: italic; font-size: 0.9rem; margin-bottom: 10px; background: rgba(139,69,19,0.05); padding: 8px;">
+                            📜 Tip: @hintText
+                        </div>
+                    }
+
+                    <input @bind="userAnswer" 
+                           @bind:event="oninput" 
+                           @onkeyup="HandleKeyUp" 
+                           class="adventure-input" 
+                           placeholder="Type your response..." 
+                           disabled="@hasFeedback" 
+                           autofocus />
+
+                    <div class="symbolBar" style="margin-top: 15px; display: flex; gap: 8px;">
+                        <button type="button" class="symBtn" @onclick='() => InsertText("#")' disabled="@hasFeedback">♯</button>
+                        <button type="button" class="symBtn" @onclick='() => InsertText("b")' disabled="@hasFeedback">♭</button>
+                        <button type="button" class="symBtn" @onclick='() => InsertText("m")' disabled="@hasFeedback">m</button>
+                        <button type="button" class="symBtn" @onclick='() => Backspace()' disabled="@hasFeedback">⌫</button>
+                        <button type="button" class="symBtn" style="margin-left: auto; border-color: #5c1919;" @onclick="ClearAnswer" disabled="@hasFeedback">Clear</button>
+                    </div>
+
+                    <div style="margin-top: 40px;">
+                        @if (!hasFeedback)
+                        {
+                            <button class="adventure-btn" style="width: 100%;" @onclick="CheckAnswer">Submit Answer</button>
+                        }
+                        else
+                        {
+                            <button class="adventure-btn" style="width: 100%; background: #3d2b1f !important;" @onclick="TriggerFlip">Flip Page →</button>
+                        }
+                    </div>
+
+                    <div class="feedback @FeedbackCssClass()" style="margin-top: 25px; text-align: center; font-size: 1.2rem;">
+                        @FeedbackText()
+                    </div>
+                }
+
+                <div style="position: absolute; bottom: 40px; right: 40px; opacity: 0.15; font-size: 5rem; pointer-events: none;">𝄞</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromQuery(Name = "mode")]
+    public string? ModeQuery { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(ModeQuery) && state == GameState.Menu)
+        {
+            var m = ModeQuery.Trim().ToLowerInvariant();
+            if (m == "interval") StartSingleQuiz(Mode.Interval);
+            else if (m == "degree") StartSingleQuiz(Mode.ScaleDegree);
+            else if (m == "chord") StartSingleQuiz(Mode.Chord);
+        }
+    }
+
+    // --- GAME DATA ---
+    private static readonly string[] Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    private static readonly int[] MajorSteps = [0, 2, 4, 5, 7, 9, 11];
+    private static readonly int[] NaturalMinorSteps = [0, 2, 3, 5, 7, 8, 10];
+    private static readonly int[] HarmonicMinorSteps = [0, 2, 3, 5, 7, 8, 11];
+    private static readonly (string Name, int Semitones)[] Intervals = [
+        ("m2", 1), ("M2", 2), ("m3", 3), ("M3", 4), ("P4", 5), ("TT", 6), ("P5", 7), ("m6", 8), ("M6", 9), ("m7", 10), ("M7", 11), ("P8", 12)
+    ];
+    private static readonly Dictionary<string, string> FlatToSharp = new() {
+        ["DB"] = "C#", ["EB"] = "D#", ["GB"] = "F#", ["AB"] = "G#", ["BB"] = "A#"
+    };
+
+    private enum GameState { Menu, Arcade, SingleQuiz, GameOver }
+    private enum Mode { Interval = 0, ScaleDegree = 1, Chord = 2 }
+    private enum Difficulty { Easy, Medium, Hard }
+    private record Question(Mode Mode, string Text, string Hint, string Answer, Func<string, string, bool>? CustomChecker = null);
+
+    // --- STATE ---
+    private Difficulty difficulty = Difficulty.Easy;
+    private int roundLength = 25;
+    private GameState state = GameState.Menu;
+    private Mode currentMode = Mode.Interval;
+    private string questionText = "";
+    private string hintText = "";
+    private string correctAnswer = "";
+    private string userAnswer = "";
+    private string feedback = "";
+    private bool hasFeedback => !string.IsNullOrWhiteSpace(feedback);
+    private bool isFlipping = false;
+
+    private int lives = 3;
+    private int level = 1;
+    private int runScore = 0;
+    private int correctCount = 0;
+    private int totalCount = 0;
+    private int bestStreak = 0;
+    private int currentStreak = 0;
+    private Random rng = new();
+    private List<Question> roundQuestions = new();
+    private int roundIndex = 0;
+    private Func<string, string, bool>? activeChecker = null;
+
+    // --- LOGIC METHODS ---
+    private void StartArcade() { Stats.Reset(); ResetCommonStats(); lives = 3; level = 1; runScore = 0; state = GameState.Arcade; BuildNewRound(); NextQuestion(); }
+    private void StartSingleQuiz(Mode mode) { ResetCommonStats(); currentMode = mode; state = GameState.SingleQuiz; BuildNewRound(); NextQuestion(); }
+    private void BackToMenu() { state = GameState.Menu; feedback = ""; userAnswer = ""; roundQuestions.Clear(); roundIndex = 0; }
+    private void ResetCommonStats() { questionText = ""; hintText = ""; correctAnswer = ""; userAnswer = ""; feedback = ""; activeChecker = null; correctCount = 0; totalCount = 0; bestStreak = 0; currentStreak = 0; roundQuestions.Clear(); roundIndex = 0; }
+
+    private void NextQuestion()
+    {
+        userAnswer = ""; feedback = ""; activeChecker = null;
+        if (roundQuestions.Count == 0 || roundIndex >= roundQuestions.Count) BuildNewRound();
+        var q = roundQuestions[roundIndex];
+        roundIndex++;
+        currentMode = q.Mode; questionText = q.Text; hintText = q.Hint; correctAnswer = q.Answer; activeChecker = q.CustomChecker;
+    }
+
+    private async Task TriggerFlip()
+    {
+        isFlipping = true;
+        StateHasChanged();
+        await Task.Delay(800); // Match CSS Animation
+        NextQuestion();
+        isFlipping = false;
+        StateHasChanged();
+    }
+
+    private void CheckAnswer()
+    {
+        if (hasFeedback || state == GameState.GameOver) return;
+        totalCount++;
+        bool isCorrect = activeChecker is not null ? activeChecker(userAnswer, correctAnswer) : NormalizeNote(userAnswer) == NormalizeNote(correctAnswer);
+
+        if (isCorrect)
+        {
+            feedback = "✅ Correct!";
+            correctCount++; currentStreak++;
+            bestStreak = Math.Max(bestStreak, currentStreak);
+            if (state == GameState.Arcade) { runScore++; if (runScore % 5 == 0) level++; }
+        }
+        else
+        {
+            feedback = $"❌ Wrong! Correct: {correctAnswer}";
+            currentStreak = 0;
+            if (state == GameState.Arcade) { lives--; if (lives <= 0) { state = GameState.GameOver; SyncStats(); return; } }
+        }
+        SyncStats();
+    }
+
+    private void SyncStats() { Stats.Correct = correctCount; Stats.Total = totalCount; Stats.BestStreak = bestStreak; Stats.ArcadeRunScore = runScore; Stats.ArcadeLevel = level; }
+
+    private void HandleKeyUp(KeyboardEventArgs e) { 
+        if (e.Key == "Enter") { if (hasFeedback) _ = TriggerFlip(); else CheckAnswer(); } 
+    }
+
+    private void BuildNewRound()
+    {
+        roundIndex = 0;
+        var modes = state == GameState.Arcade ? [Mode.Interval, Mode.ScaleDegree, Mode.Chord] : new Mode[] { currentMode };
+        var pool = new List<Question>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var m in modes) { foreach (var q in BuildQuestionsForMode(m, difficulty)) { var key = $"{q.Mode}|{q.Text}|{q.Answer}"; if (seen.Add(key)) pool.Add(q); } }
+        Shuffle(pool);
+        roundQuestions = pool.Take(Math.Min(roundLength, pool.Count)).ToList();
+    }
+
+    private IEnumerable<Question> BuildQuestionsForMode(Mode mode, Difficulty diff) => mode switch {
+        Mode.Interval => BuildIntervalQuestions(diff),
+        Mode.ScaleDegree => BuildScaleDegreeQuestions(diff),
+        Mode.Chord => BuildChordQuestions(diff),
+        _ => Enumerable.Empty<Question>()
+    };
+
+    // --- GENERATORS ---
+    private IEnumerable<Question> BuildIntervalQuestions(Difficulty diff)
+    {
+        var starts = (diff == Difficulty.Easy) ? Notes.Where(n => !n.Contains("#")).ToArray() : Notes;
+        foreach (var start in starts)
+            foreach (var interval in Intervals) {
+                if (diff == Difficulty.Easy && interval.Semitones > 7) continue;
+                yield return new Question(Mode.Interval, $"What is {start} + {interval.Name}?", "A single note.", Transpose(start, interval.Semitones));
+            }
+    }
+
+    private IEnumerable<Question> BuildScaleDegreeQuestions(Difficulty diff)
+    {
+        var keys = (diff == Difficulty.Easy) ? Notes.Where(n => !n.Contains("#")).ToArray() : Notes;
+        foreach (var key in keys) {
+            var scale = BuildScale(key, MajorSteps);
+            for (int degree = 1; degree <= 7; degree++)
+                yield return new Question(Mode.ScaleDegree, $"In {key} major, what is degree {degree}?", "A single note.", scale[degree - 1]);
+        }
+    }
+
+    private IEnumerable<Question> BuildChordQuestions(Difficulty diff)
+    {
+        var roots = (diff == Difficulty.Easy) ? Notes.Where(n => !n.Contains("#")).ToArray() : Notes;
+        var triads = new List<(string Name, int[] Steps)> { ("Major", [0, 4, 7]) };
+        if (diff >= Difficulty.Medium) triads.Add(("Minor", [0, 3, 7]));
+        foreach (var root in roots)
+            foreach (var t in triads) {
+                var ans = string.Join(" ", t.Steps.Select(s => Transpose(root, s)));
+                yield return new Question(Mode.Chord, $"Spell the {root} {t.Name} triad:", "Spaces or commas.", ans, (u, c) => TokenizeNotes(u).SetEquals(TokenizeNotes(c)));
+            }
+    }
+
+    // --- HELPERS ---
+    private static string NormalizeNote(string input) {
+        if (string.IsNullOrWhiteSpace(input)) return "";
+        string s = input.Trim().ToUpper().Replace(" ", "");
+        if (s.Length == 2 && s[1] == 'B' && FlatToSharp.TryGetValue(s, out var sharp)) return sharp;
+        return s;
+    }
+    private static HashSet<string> TokenizeNotes(string input) => new(input.ToUpper().Split([' ', ',', ';', '/'], StringSplitOptions.RemoveEmptyEntries).Select(NormalizeNote).Where(x => !string.IsNullOrWhiteSpace(x)));
+    private static int IndexOfNote(string note) => Array.IndexOf(Notes, NormalizeNote(note));
+    private static string Transpose(string start, int semitones) { int i = IndexOfNote(start); if (i < 0) return start; int m = (i + semitones) % 12; if (m < 0) m += 12; return Notes[m]; }
+    private static string[] BuildScale(string key, int[] steps) { int r = Math.Max(0, IndexOfNote(key)); return steps.Select(step => Notes[(r + step) % 12]).ToArray(); }
+    private void Shuffle<T>(IList<T> list) { for (int i = list.Count - 1; i > 0; i--) { int j = rng.Next(i + 1); (list[i], list[j]) = (list[j], list[i]); } }
+    private string ModeLabel() => currentMode.ToString();
+    private string FeedbackCssClass() => !hasFeedback ? "neutral" : feedback.StartsWith("✅") ? "good" : "bad";
+    private string FeedbackText() => hasFeedback ? feedback : "Awaiting the harmony...";
+    private void InsertText(string text) => userAnswer += text;
+    private void Backspace() { if (userAnswer.Length > 0) userAnswer = userAnswer[..^1]; }
+    private void ClearAnswer() => userAnswer = "";
+}

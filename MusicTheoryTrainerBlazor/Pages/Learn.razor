@@ -1,0 +1,247 @@
+@page "/learn"
+@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<div class="tt-bookStage">
+
+    <div class="tt-bookFrame @flipClass" id="tt-book">
+
+        <!-- LEFT PAGE -->
+        <div class="tt-page tt-left">
+            <div class="tt-pageInner">
+                <div class="tt-pageNum">@LeftPageNumber</div>
+                @((MarkupString)LeftHtml)
+            </div>
+        </div>
+
+        <!-- RIGHT PAGE -->
+        <div class="tt-page tt-right">
+            <div class="tt-pageInner">
+                <div class="tt-pageNum">@RightPageNumber</div>
+                @((MarkupString)RightHtml)
+            </div>
+        </div>
+
+        <!-- spine crease -->
+        <div class="tt-spine"></div>
+    </div>
+
+    <div class="tt-bookControls">
+        <button class="tt-bookBtn secondary" @onclick="PrevPage" disabled="@IsFirstSpread">← Prev</button>
+
+        <div class="tt-bookMeta">
+            <div class="tt-bookTitle">The Theory Trials Codex</div>
+            <div class="tt-bookSub">Swipe / click to turn pages • Old-school rules + drills</div>
+        </div>
+
+        <button class="tt-bookBtn secondary" @onclick="NextPage" disabled="@IsLastSpread">Next →</button>
+    </div>
+
+</div>
+
+@code {
+    // --- BOOK CONTENT ---
+    // Each "spread" is two pages (left + right).
+    private record Spread(string LeftHtml, string RightHtml);
+
+    private int spreadIndex = 0;
+    private string flipClass = ""; // "tt-flip-next" / "tt-flip-prev"
+
+    private List<Spread> spreads = new()
+    {
+        new Spread(
+            LeftHtml: @"
+<h1>The Theory Trials Codex</h1>
+<p class='lead'>A practical handbook for players of <b>Theory Trials</b>. This book teaches only what you need, in the order you need it.</p>
+
+<h2>How to Train</h2>
+<ul>
+  <li><b>Read one spread</b> (two pages).</li>
+  <li><b>Play 10 questions</b> in the game.</li>
+  <li><b>Return</b> and read the next spread.</li>
+</ul>
+
+<p class='note'><b>Note:</b> You do not need to memorize everything at once. Music theory sticks when you use it.</p>
+",
+            RightHtml: @"
+<h2>Symbols You Will See</h2>
+<p><b>♯</b> (sharp) means raise the note by one half-step.</p>
+<p><b>♭</b> (flat) means lower the note by one half-step.</p>
+<p><b>dim</b> (diminished) means smaller / lowered.</p>
+<p><b>aug</b> (augmented) means larger / raised.</p>
+
+<h2>Two rules that never fail</h2>
+<ol>
+  <li><b>E–F</b> and <b>B–C</b> are already half-steps.</li>
+  <li>Everything else letter-to-letter is a whole-step unless altered.</li>
+</ol>
+
+<p class='drill'><b>Drill:</b> Say aloud: C→C#→D→D#→E→F→F#→G→G#→A→A#→B→C</p>
+"
+        ),
+
+        new Spread(
+            LeftHtml: @"
+<h2>Chapter I — Notes</h2>
+<p>Music uses seven letter names:</p>
+<p class='bigcode'>A B C D E F G</p>
+<p>After G, the alphabet loops back to A. This loop is the skeleton of everything in the game.</p>
+
+<h3>Half-steps</h3>
+<p>A half-step is the smallest move in the system. On piano, it is the next key (black or white).</p>
+
+<p class='drill'><b>Drill:</b> Name the next note (up a half-step): C, E, F#, B, A#.</p>
+",
+            RightHtml: @"
+<h2>The 12-note cycle</h2>
+<p>In the game we use the 12-tone cycle:</p>
+<p class='bigcode'>C C# D D# E F F# G G# A A# B</p>
+
+<h3>Why this matters</h3>
+<p>Intervals are measured in half-steps. Chords are built by stacking specific half-step distances.</p>
+
+<p class='drill'><b>Drill:</b> Count half-steps:</p>
+<ul>
+  <li>C → E = ?</li>
+  <li>D → A = ?</li>
+  <li>F → B = ?</li>
+</ul>
+<p class='hint'>Tip: Move along the 12-note cycle and count.</p>
+"
+        ),
+
+        new Spread(
+            LeftHtml: @"
+<h2>Chapter II — Sharps & Flats</h2>
+<p><b>Sharp</b> raises a note one half-step.</p>
+<p><b>Flat</b> lowers a note one half-step.</p>
+
+<h3>Enharmonic notes</h3>
+<p>Some notes sound the same but have different names:</p>
+<ul>
+  <li>F# = Gb</li>
+  <li>C# = Db</li>
+  <li>A# = Bb</li>
+</ul>
+
+<p class='note'><b>Game rule (for now):</b> Either spelling can be acceptable if we enable enharmonics.</p>
+",
+            RightHtml: @"
+<h2>When to choose ♯ vs ♭</h2>
+<p>In real music, the spelling depends on the <b>key</b> and the <b>letter sequence</b>.</p>
+
+<h3>Letter rule</h3>
+<p>Scales use each letter A–G exactly once.</p>
+<p>So in a G major scale, the seventh degree must be some kind of <b>F</b> (not Gb).</p>
+
+<p class='drill'><b>Drill:</b> Which is more “correct” in G major?</p>
+<ul>
+  <li>F# or Gb</li>
+  <li>C# or Db</li>
+</ul>
+<p class='hint'>Answer: keep the letter that belongs in the scale.</p>
+"
+        ),
+
+        new Spread(
+            LeftHtml: @"
+<h2>Chapter III — Intervals</h2>
+<p>An <b>interval</b> is the distance between notes.</p>
+
+<h3>Core set</h3>
+<ul>
+  <li>m2 = 1 half-step</li>
+  <li>M2 = 2</li>
+  <li>m3 = 3</li>
+  <li>M3 = 4</li>
+  <li>P4 = 5</li>
+  <li>TT = 6</li>
+  <li>P5 = 7</li>
+  <li>m6 = 8</li>
+  <li>M6 = 9</li>
+  <li>m7 = 10</li>
+  <li>M7 = 11</li>
+  <li>P8 = 12</li>
+</ul>
+",
+            RightHtml: @"
+<h2>Fast interval method</h2>
+<p><b>Don’t guess.</b> Count half-steps on the 12-note cycle.</p>
+
+<p><b>Example:</b> What is E + P4?</p>
+<ul>
+  <li>P4 = 5 half-steps</li>
+  <li>E→F(1)→F#(2)→G(3)→G#(4)→A(5)</li>
+</ul>
+<p><b>Answer:</b> A</p>
+
+<p class='drill'><b>Drill:</b> Solve:</p>
+<ul>
+  <li>D + m3 = ?</li>
+  <li>A + P5 = ?</li>
+  <li>F# + M2 = ?</li>
+</ul>
+"
+        ),
+    };
+
+    // --- Display helpers ---
+    private bool IsFirstSpread => spreadIndex <= 0;
+    private bool IsLastSpread => spreadIndex >= spreads.Count - 1;
+
+    private string LeftHtml => spreads[spreadIndex].LeftHtml;
+    private string RightHtml => spreads[spreadIndex].RightHtml;
+
+    // Page numbers (2 pages per spread)
+    private int LeftPageNumber => spreadIndex * 2 + 1;
+    private int RightPageNumber => spreadIndex * 2 + 2;
+
+    // --- Swipe support (optional) ---
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        // attach swipe if you already have ttBook.attachSwipe in index.html
+        try
+        {
+            var dotnetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("ttBook.attachSwipe", "tt-book", dotnetRef);
+        }
+        catch
+        {
+            // If your JS isn't present yet, it's fine. Buttons still work.
+        }
+    }
+
+    [JSInvokable] public Task Next() => NextPage();
+    [JSInvokable] public Task Prev() => PrevPage();
+
+    private async Task NextPage()
+    {
+        if (IsLastSpread) return;
+
+        flipClass = "tt-flip-next";
+        StateHasChanged();
+
+        await Task.Delay(520); // match CSS animation duration
+        spreadIndex++;
+
+        flipClass = "";
+        StateHasChanged();
+    }
+
+    private async Task PrevPage()
+    {
+        if (IsFirstSpread) return;
+
+        flipClass = "tt-flip-prev";
+        StateHasChanged();
+
+        await Task.Delay(520);
+        spreadIndex--;
+
+        flipClass = "";
+        StateHasChanged();
+    }
+}

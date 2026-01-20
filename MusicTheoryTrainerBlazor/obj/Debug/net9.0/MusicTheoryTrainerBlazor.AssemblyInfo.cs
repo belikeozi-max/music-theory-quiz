@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MusicTheoryTrainerBlazor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+402bdb1ba153653023963dedd08443b2d25342d1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+739ed7c55f23733c6ddd5ad041a9792fd85f53bb")]
 [assembly: System.Reflection.AssemblyProductAttribute("MusicTheoryTrainerBlazor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MusicTheoryTrainerBlazor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

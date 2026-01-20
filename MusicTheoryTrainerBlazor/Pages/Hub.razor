@@ -1,0 +1,43 @@
+@page "/hub"
+@using MusicTheoryTrainerBlazor.Services
+@inject SessionStats Stats
+
+<div class="tt-bookStage">
+    <div class="tt-bookFrame">
+        <div class="tt-spine"></div>
+
+        <div class="tt-page tt-left">
+            <div class="tt-pageInner">
+                <h2 style="font-family: 'Uncial Antiqua', serif; color: #3d2b1f; border-bottom: 2px solid #8b4513;">Archives</h2>
+                
+                <div style="margin-top: 30px; display: grid; gap: 12px;">
+                    <div class="pill">Correct: <strong>@Stats.Correct</strong></div>
+                    <div class="pill">Total: <strong>@Stats.Total</strong></div>
+                    <div class="pill">Best Streak: <strong>@Stats.BestStreak</strong></div>
+                    <div class="pill">Run Score: <strong>@Stats.ArcadeRunScore</strong></div>
+                    <div class="pill">Level: <strong>@Stats.ArcadeLevel</strong></div>
+                </div>
+
+                <p style="margin-top: 30px; font-size: 0.9rem; font-style: italic; color: #5d4037;">
+                    "The quill records every triumph and every stumble."
+                </p>
+            </div>
+        </div>
+
+        <div class="tt-page tt-right">
+            <div class="tt-pageInner">
+                <h2 style="font-family: 'Uncial Antiqua', serif; color: #3d2b1f; border-bottom: 2px solid #8b4513;">Chronicles</h2>
+
+                <ul style="margin-top: 25px; list-style-type: '❧ '; padding-left: 20px; line-height: 1.8;">
+                    <li>Quick symbols keypad (♯, ♭, etc).</li>
+                    <li>No-repeat question rounds.</li>
+                    <li>Transition to Medieval Scholar UI.</li>
+                </ul>
+
+                <div style="margin-top: 30px; padding: 15px; background: rgba(139, 69, 19, 0.05); border-left: 4px solid #8b4513;">
+                    <strong>Upcoming:</strong> A proper animated "book" Learn mode + more question variety.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

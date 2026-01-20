@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "M3PFdTFM5Tk=",
+  "dgSpecHash": "rTWcAKL4cB8=",
   "success": true,
   "projectFilePath": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj",
   "expectedPackageFiles": [
@@ -30,6 +30,7 @@
     "C:\\Users\\Ozzi\\.nuget\\packages\\microsoft.jsinterop.webassembly\\9.0.12\\microsoft.jsinterop.webassembly.9.0.12.nupkg.sha512",
     "C:\\Users\\Ozzi\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.12\\microsoft.net.illink.tasks.9.0.12.nupkg.sha512",
     "C:\\Users\\Ozzi\\.nuget\\packages\\microsoft.net.sdk.webassembly.pack\\9.0.12\\microsoft.net.sdk.webassembly.pack.9.0.12.nupkg.sha512",
+    "C:\\Users\\Ozzi\\.nuget\\packages\\radzen.blazor\\8.6.5\\radzen.blazor.8.6.5.nupkg.sha512",
     "C:\\Users\\Ozzi\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\9.0.12\\microsoft.netcore.app.runtime.mono.browser-wasm.9.0.12.nupkg.sha512"
   ],
   "logs": []

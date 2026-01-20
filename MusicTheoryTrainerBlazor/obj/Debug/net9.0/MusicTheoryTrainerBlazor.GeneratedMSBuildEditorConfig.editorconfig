@@ -36,6 +36,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Ozzi/RiderProjects/music-theory-quiz/MusicTheoryTrainerBlazor/Pages/Hub.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSHViLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ozzi/RiderProjects/music-theory-quiz/MusicTheoryTrainerBlazor/Pages/Learn.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGVhcm4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ozzi/RiderProjects/music-theory-quiz/MusicTheoryTrainerBlazor/Pages/Play.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGxheS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ozzi/RiderProjects/music-theory-quiz/MusicTheoryTrainerBlazor/Pages/Stats.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhdHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Ozzi/RiderProjects/music-theory-quiz/MusicTheoryTrainerBlazor/Pages/Updates.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBkYXRlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Ozzi/RiderProjects/music-theory-quiz/MusicTheoryTrainerBlazor/Pages/Weather.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcV2VhdGhlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

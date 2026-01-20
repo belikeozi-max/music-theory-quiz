@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[9.0.12, )",
               "autoReferenced": true
+            },
+            "Radzen.Blazor": {
+              "target": "Package",
+              "version": "[8.6.5, )"
             }
           },
           "imports": [
