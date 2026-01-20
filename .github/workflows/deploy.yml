@@ -16,7 +16,7 @@ jobs:
           dotnet-version: '9.0.x' # Matches your project version
 
       - name: Publish .NET Core Project
-        run: dotnet publish MusicTheoryTrainerBlazor.csproj -c Release -o release --nologo
+        run: dotnet publish MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj -c Release -o release --nologo
 
       # This fixes the 404 error on refresh
       - name: Change index.html base-href
