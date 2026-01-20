@@ -1,373 +1,171 @@
 ﻿@page "/"
-@using System
 @using System.Linq
-@using System.Collections.Generic
 
-<h1 class="title">Music Theory Trainer</h1>
-<p class="subtitle">Blazor (C# logic, web UI). Sharps only for now.</p>
+<div class="container mt-4">
+    <h1 class="text-center">🎵 Music Theory Trainer</h1>
 
-<div class="grid">
-  <div class="card">
-    <div class="row">
-      <div class="field">
-        <div class="label">Mode</div>
-        <select @bind="Mode">
-          <option value="Arcade">Arcade (mixed, lives, levels)</option>
-          <option value="Interval">Intervals</option>
-          <option value="Degree">Scale Degrees (Major)</option>
-          <option value="Chord">Chords (Triads)</option>
-        </select>
-      </div>
+    <div class="card p-4 shadow-sm">
+        @if (!arcadeActive && !isQuizActive)
+        {
+            <div class="text-center">
+                <button class="btn btn-fire btn-lg m-2" @onclick="StartArcade">🔥 Start Arcade Mode</button>
+                <div class="mt-3">
+                    <button class="btn btn-outline-primary m-1" @onclick="() => StartSingleQuiz(0)">Interval Quiz</button>
+                    <button class="btn btn-outline-primary m-1" @onclick="() => StartSingleQuiz(1)">Scale Degree Quiz</button>
+                    <button class="btn btn-outline-primary m-1" @onclick="() => StartSingleQuiz(2)">Chord Quiz</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="quiz-header d-flex justify-content-between mb-3">
+                <span>❤️ Lives: @lives</span>
+                <span>⭐ Level: @level</span>
+                <span>📈 Run Score: @runScore</span>
+            </div>
 
-      <div class="field">
-        <div class="label">Arcade Length</div>
-        <select @bind="ArcadeLength">
-          <option value="Endless">Endless</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-        </select>
-      </div>
+            <div class="question-box bg-dark text-white p-4 rounded text-center mb-3">
+                <h3>@questionText</h3>
+                <small class="text-muted">@hintText</small>
+            </div>
+
+            <div class="input-group mb-3">
+                <input @bind="userAnswer" @bind:event="oninput" @onkeyup="HandleKeyUp" class="form-control" placeholder="Type answer..." autofocus />
+                <button class="btn btn-success" @onclick="CheckAnswer">Submit</button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(feedback))
+            {
+                <div class="alert @feedbackClass">@feedback</div>
+                <button class="btn btn-secondary w-100" @onclick="NextQuestion">Next Question</button>
+            }
+        }
     </div>
 
-    <div class="questionBox">
-      <div class="qtype">@QuestionType</div>
-      <div class="qtext">@QuestionText</div>
-      <div class="hint">@HintText</div>
+    <div class="mt-4 text-center">
+        <p>Total Score: @correctCount/@totalCount | Best Streak: @bestStreak</p>
     </div>
-
-    <div class="field" style="margin-top:12px;">
-      <div class="label">Your Answer</div>
-      <input @bind="UserAnswer" @bind:event="oninput" placeholder="@AnswerPlaceholder" />
-    </div>
-
-    <div class="row buttons">
-      <button @onclick="Check">Check</button>
-      <button class="secondary" @onclick="NewQuestion">New Question</button>
-      <button class="secondary" @onclick="Reveal">Reveal</button>
-      <button class="danger" @onclick="ResetStats">Reset Stats</button>
-      @if (ArcadeActive)
-      {
-        <button class="secondary" @onclick="StopArcade">Stop Arcade</button>
-      }
-    </div>
-
-    <div class="feedback @FeedbackClass">@FeedbackText</div>
-
-    <div class="pillbar">
-      <div class="pill">Score: <strong>@Correct</strong>/<strong>@Total</strong></div>
-      <div class="pill">Streak: <strong>@Streak</strong></div>
-      <div class="pill">Best: <strong>@BestStreak</strong></div>
-
-      @if (ArcadeActive)
-      {
-        <div class="pill">Lives: <strong>@Lives</strong> | Level: <strong>@Level</strong> | Run: <strong>@RunScore</strong></div>
-      }
-    </div>
-  </div>
-
-  <div class="card">
-    <h2 class="title2">Stats</h2>
-    <div class="stats">
-      <div class="stat"><div class="k">Correct</div><div class="v">@Correct</div></div>
-      <div class="stat"><div class="k">Total</div><div class="v">@Total</div></div>
-      <div class="stat"><div class="k">Accuracy</div><div class="v">@Accuracy.ToString("0.0")%</div></div>
-      <div class="stat"><div class="k">Best Streak</div><div class="v">@BestStreak</div></div>
-    </div>
-
-    <div class="hr"></div>
-    <div class="small">
-      <div><strong>Notes:</strong> Use sharps like <code>C#</code>, <code>F#</code>.</div>
-      <div><strong>Chords:</strong> Type 3 notes separated by spaces, order does not matter (example: <code>C E G</code>).</div>
-    </div>
-  </div>
 </div>
 
 @code {
-  private static readonly string[] Notes = { "C","C#","D","D#","E","F","F#","G","G#","A","A#","B" };
+    // --- DATA FROM YOUR ORIGINAL PROGRAM.CS ---
+    private static readonly string[] Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    private static readonly int[] MajorSteps = [0, 2, 4, 5, 7, 9, 11];
+    private static readonly (string Name, int Semitones)[] Intervals = [
+        ("m2", 1), ("M2", 2), ("m3", 3), ("M3", 4), ("P4", 5), ("TT", 6), ("P5", 7), ("m6", 8), ("M6", 9), ("m7", 10), ("M7", 11), ("P8", 12)
+    ];
 
-  private static readonly (string Name, int Semitones)[] Intervals =
-  {
-    ("m2",1),("M2",2),("m3",3),("M3",4),
-    ("P4",5),("TT",6),("P5",7),
-    ("m6",8),("M6",9),("m7",10),("M7",11),
-    ("P8",12)
-  };
+    // --- STATE MANAGEMENT ---
+    private bool arcadeActive = false;
+    private bool isQuizActive = false;
+    private string questionText = "";
+    private string hintText = "";
+    private string correctAnswer = "";
+    private string userAnswer = "";
+    private string feedback = "";
+    private string feedbackClass = "";
+    
+    private int lives = 3;
+    private int level = 1;
+    private int runScore = 0;
+    private int correctCount = 0;
+    private int totalCount = 0;
+    private int bestStreak = 0;
+    private int currentStreak = 0;
+    private int currentMode = 0; // 0=Interval, 1=Degree, 2=Chord
 
-  private static readonly (int Degree, string Name, string Short)[] DegreeNames =
-  {
-    (1,"Tonic","T"),(2,"Supertonic","ST"),(3,"Mediant","M"),
-    (4,"Subdominant","SD"),(5,"Dominant","D"),(6,"Submediant","SM"),(7,"Leading tone","LT")
-  };
+    private Random rng = new();
 
-  private static readonly int[] MajorSteps = { 0,2,4,5,7,9,11 };
-
-  private readonly Random _rng = new();
-
-  private string Mode { get; set; } = "Arcade";
-  private string ArcadeLength { get; set; } = "Endless";
-
-  private string QuestionType { get; set; } = "Question";
-  private string QuestionText { get; set; } = "Press New Question to start.";
-  private string HintText { get; set; } = "Tip: Use # for sharps. Chords: C E G.";
-  private string AnswerPlaceholder => _answerKind == AnswerKind.Chord ? "Example: C E G" : "Example: C#";
-  private string UserAnswer { get; set; } = "";
-
-  private string FeedbackText { get; set; } = "No question yet.";
-  private string FeedbackClass { get; set; } = "neutral";
-
-  private int Correct { get; set; }
-  private int Total { get; set; }
-  private int Streak { get; set; }
-  private int BestStreak { get; set; }
-  private double Accuracy => Total == 0 ? 0 : 100.0 * Correct / Total;
-
-  private bool ArcadeActive { get; set; }
-  private int Lives { get; set; } = 3;
-  private int Level { get; set; } = 1;
-  private int RunScore { get; set; }
-  private int ArcadeAsked { get; set; }
-
-  private enum AnswerKind { Note, Chord }
-  private AnswerKind _answerKind = AnswerKind.Note;
-  private string _answerNote = "";
-  private HashSet<string> _answerChord = new();
-  private string _reveal = "";
-
-  private void NewQuestion()
-  {
-    SetFeedback("neutral", "Answer the question, then press Check.");
-    UserAnswer = "";
-
-    if (Mode == "Arcade")
-    {
-      if (!ArcadeActive) StartArcadeRun();
-
-      ArcadeAsked++;
-
-      int pick = _rng.Next(3);
-      if (pick == 0) MakeIntervalQuestion(arcade: true);
-      else if (pick == 1) MakeDegreeQuestion(arcade: true);
-      else MakeChordQuestion(arcade: true);
-    }
-    else if (Mode == "Interval") MakeIntervalQuestion(arcade: false);
-    else if (Mode == "Degree") MakeDegreeQuestion(arcade: false);
-    else MakeChordQuestion(arcade: false);
-  }
-
-  private void Check()
-  {
-    if (QuestionText.StartsWith("Press"))
-    {
-      SetFeedback("neutral", "Press New Question first.");
-      return;
+    private void StartArcade() {
+        arcadeActive = true;
+        lives = 3;
+        level = 1;
+        runScore = 0;
+        NextQuestion();
     }
 
-    bool correctNow;
-
-    if (_answerKind == AnswerKind.Chord)
-    {
-      var user = NormalizeChord(UserAnswer);
-      correctNow = _answerChord.SetEquals(user);
-    }
-    else
-    {
-      var user = NormalizeNote(UserAnswer);
-      correctNow = !string.IsNullOrWhiteSpace(user) && user == _answerNote;
+    private void StartSingleQuiz(int mode) {
+        isQuizActive = true;
+        currentMode = mode;
+        NextQuestion();
     }
 
-    Total++;
-    if (correctNow)
-    {
-      Correct++;
-      Streak++;
-      BestStreak = Math.Max(BestStreak, Streak);
-    }
-    else
-    {
-      Streak = 0;
+    private void NextQuestion() {
+        userAnswer = "";
+        feedback = "";
+        if (arcadeActive) currentMode = rng.Next(3);
+        
+        if (currentMode == 0) SetupInterval();
+        else if (currentMode == 1) SetupDegree();
+        else SetupChord();
     }
 
-    if (Mode == "Arcade" && ArcadeActive)
-    {
-      if (correctNow)
-      {
-        RunScore++;
-        if (RunScore > 0 && RunScore % 5 == 0) Level++;
-      }
-      else
-      {
-        Lives--;
-      }
-
-      bool outOfLives = Lives <= 0;
-      bool reachedLimit = ArcadeLength != "Endless" && ArcadeAsked >= int.Parse(ArcadeLength);
-
-      if (outOfLives)
-      {
-        SetFeedback("bad", $"Wrong. Answer: {_reveal}. GAME OVER (no lives). Run score: {RunScore}.");
-        ArcadeActive = false;
-        return;
-      }
-      if (reachedLimit)
-      {
-        SetFeedback(correctNow ? "good" : "bad",
-          $"{(correctNow ? "Correct" : "Wrong")}. {_reveal}. Run complete ({ArcadeLength}). Run score: {RunScore}.");
-        ArcadeActive = false;
-        return;
-      }
+    private void SetupInterval() {
+        var start = Notes[rng.Next(Notes.Length)];
+        var interval = Intervals[rng.Next(Intervals.Length)];
+        questionText = $"What is {start} + {interval.Name}?";
+        correctAnswer = Transpose(start, interval.Semitones);
+        hintText = "Enter a single note (e.g., F#)";
     }
 
-    SetFeedback(correctNow ? "good" : "bad", $"{(correctNow ? "Correct" : "Wrong")}. {_reveal}");
-  }
-
-  private void Reveal()
-  {
-    if (string.IsNullOrWhiteSpace(_reveal))
-      SetFeedback("neutral", "No question to reveal yet.");
-    else
-      SetFeedback("neutral", $"Answer: {_reveal}");
-  }
-
-  private void ResetStats()
-  {
-    Correct = Total = Streak = BestStreak = 0;
-    StopArcade();
-    SetFeedback("neutral", "Stats reset. Press New Question.");
-  }
-
-  private void StopArcade()
-  {
-    ArcadeActive = false;
-    Lives = 3;
-    Level = 1;
-    RunScore = 0;
-    ArcadeAsked = 0;
-  }
-
-  private void StartArcadeRun()
-  {
-    ArcadeActive = true;
-    Lives = 3;
-    Level = 1;
-    RunScore = 0;
-    ArcadeAsked = 0;
-  }
-
-  private void MakeIntervalQuestion(bool arcade)
-  {
-    var start = Notes[_rng.Next(Notes.Length)];
-    var pool = (arcade && Level < 3) ? Intervals.Where(i => i.Semitones <= 7).ToArray() : Intervals;
-    var interval = pool[_rng.Next(pool.Length)];
-    var ans = Transpose(start, interval.Semitones);
-
-    QuestionType = arcade ? "Arcade: Interval" : "Interval";
-    QuestionText = $"What is {start} + {interval.Name} ?";
-    HintText = "Answer with a single note (example: F#).";
-    _answerKind = AnswerKind.Note;
-    _answerNote = NormalizeNote(ans);
-    _answerChord = new();
-    _reveal = $"{start} + {interval.Name} = {ans}";
-  }
-
-  private void MakeDegreeQuestion(bool arcade)
-  {
-    var key = Notes[_rng.Next(Notes.Length)];
-    var degree = DegreeNames[_rng.Next(DegreeNames.Length)];
-    var scale = BuildMajorScale(key);
-    var ans = scale[degree.Degree - 1];
-
-    QuestionType = arcade ? "Arcade: Scale Degree (Major)" : "Scale Degree (Major)";
-    QuestionText = $"In {key} major, what note is Degree {degree.Degree} ({degree.Short}) ?";
-    HintText = "Answer with a single note (example: C#).";
-    _answerKind = AnswerKind.Note;
-    _answerNote = NormalizeNote(ans);
-    _answerChord = new();
-    _reveal = $"{key} major Degree {degree.Degree} = {ans}";
-  }
-
-  private void MakeChordQuestion(bool arcade)
-  {
-    var root = Notes[_rng.Next(Notes.Length)];
-
-    var qualities = new List<(string Name, int[] Steps)>
-    {
-      ("maj", new[] { 0, 4, 7 }),
-      ("min", new[] { 0, 3, 7 })
-    };
-
-    if (!arcade)
-    {
-      qualities.Add(("dim", new[] { 0, 3, 6 }));
-      qualities.Add(("aug", new[] { 0, 4, 8 }));
-    }
-    else
-    {
-      if (Level >= 2) qualities.Add(("dim", new[] { 0, 3, 6 }));
-      if (Level >= 3) qualities.Add(("aug", new[] { 0, 4, 8 }));
+    private void SetupDegree() {
+        var key = Notes[rng.Next(Notes.Length)];
+        int degreeIdx = rng.Next(7);
+        var scale = BuildMajorScale(key);
+        questionText = $"In {key} major, what is degree {degreeIdx + 1}?";
+        correctAnswer = scale[degreeIdx];
     }
 
-    var q = qualities[_rng.Next(qualities.Count)];
-    var tones = q.Steps.Select(st => Transpose(root, st)).ToArray();
-
-    QuestionType = arcade ? "Arcade: Chord (Triad)" : "Chord (Triad)";
-    QuestionText = $"Spell the chord: {root} {q.Name} (3 notes, any order)";
-    HintText = "Type 3 notes separated by spaces (example: C E G).";
-    _answerKind = AnswerKind.Chord;
-    _answerNote = "";
-    _answerChord = new HashSet<string>(tones.Select(NormalizeNote));
-    _reveal = $"{root} {q.Name} = {string.Join(" ", tones)}";
-  }
-
-  private void SetFeedback(string kind, string text)
-  {
-    FeedbackClass = kind;
-    FeedbackText = text;
-  }
-
-  private string Transpose(string start, int semitones)
-  {
-    int i = Array.IndexOf(Notes, start);
-    if (i < 0) return start;
-    int moved = (i + semitones) % Notes.Length;
-    if (moved < 0) moved += Notes.Length;
-    return Notes[moved];
-  }
-
-  private string[] BuildMajorScale(string key)
-  {
-    int rootIndex = Array.IndexOf(Notes, key);
-    if (rootIndex < 0) return new[] { key };
-
-    var scale = new string[7];
-    for (int i = 0; i < 7; i++)
-    {
-      int noteIndex = (rootIndex + MajorSteps[i]) % 12;
-      scale[i] = Notes[noteIndex];
+    private void SetupChord() {
+        var root = Notes[rng.Next(Notes.Length)];
+        questionText = $"Spell the {root} Major triad:";
+        correctAnswer = $"{Transpose(root, 0)} {Transpose(root, 4)} {Transpose(root, 7)}";
+        hintText = "Enter 3 notes separated by spaces.";
     }
-    return scale;
-  }
 
-  private static string NormalizeNote(string raw)
-  {
-    if (raw is null) return "";
-    var s = raw.Trim().ToUpperInvariant()
-      .Replace(" ", "")
-      .Replace("SHARP", "#")
-      .Replace("♯", "#");
+    private void CheckAnswer() {
+        totalCount++;
+        bool isCorrect = false;
 
-    if (s.Length == 0) return "";
-    if (s.Length >= 2 && s[1] == '#') return s[0] + "#";
-    return s[0].ToString();
-  }
+        if (currentMode == 2) {
+            var userTones = new HashSet<string>(userAnswer.ToUpper().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            var correctTones = new HashSet<string>(correctAnswer.ToUpper().Split(' '));
+            isCorrect = userTones.SetEquals(correctTones);
+        } else {
+            isCorrect = userAnswer.Trim().ToUpper() == correctAnswer.ToUpper();
+        }
 
-  private static HashSet<string> NormalizeChord(string raw)
-  {
-    if (raw is null) return new HashSet<string>();
-    var parts = raw.Trim()
-      .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-      .Select(NormalizeNote)
-      .Where(x => !string.IsNullOrWhiteSpace(x));
-    return new HashSet<string>(parts);
-  }
+        if (isCorrect) {
+            feedback = "✅ Correct!";
+            feedbackClass = "alert-success";
+            correctCount++;
+            currentStreak++;
+            runScore++;
+            if (runScore % 5 == 0) level++;
+            if (currentStreak > bestStreak) bestStreak = currentStreak;
+        } else {
+            feedback = $"❌ Wrong! Answer was: {correctAnswer}";
+            feedbackClass = "alert-danger";
+            currentStreak = 0;
+            if (arcadeActive) lives--;
+        }
+
+        if (lives <= 0) {
+            feedback = "💀 Game Over!";
+            arcadeActive = false;
+        }
+    }
+
+    private void HandleKeyUp(KeyboardEventArgs e) { if (e.Key == "Enter") CheckAnswer(); }
+
+    private string Transpose(string start, int semitones) {
+        int i = Array.IndexOf(Notes, start);
+        int moved = (i + semitones) % 12;
+        return Notes[moved < 0 ? moved + 12 : moved];
+    }
+
+    private string[] BuildMajorScale(string key) {
+        int root = Array.IndexOf(Notes, key);
+        return MajorSteps.Select(step => Notes[(root + step) % 12]).ToArray();
+    }
 }
