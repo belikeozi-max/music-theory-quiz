@@ -13,13 +13,11 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x' # Matches your project version
+          dotnet-version: '9.0.x'
 
       - name: Publish .NET Core Project
-          run: dotnet publish MusicTheoryTrainerBlazor.csproj -c Release -o release --nologo
-          working-directory: MusicTheoryTrainerBlazor
+        run: dotnet publish MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj -c Release -o release --nologo
 
-      # This fixes the 404 error on refresh
       - name: Change index.html base-href
         run: sed -i 's/<base href="\/" \/>/<base href="\/music-theory-quiz\/" \/>/g' release/wwwroot/index.html
 
@@ -30,4 +28,3 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: release/wwwroot
-          branch: gh-pages # This creates a special hidden branch for the website
