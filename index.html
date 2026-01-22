@@ -4,29 +4,82 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MusicTheoryTrainerBlazor</title>
+    <title>Theory Trials</title>
     <base href="/music-theory-quiz/" />
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
+
     <link rel="icon" type="image/png" href="favicon.png" />
+
+    <!-- Framework / vendor styles first -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css" />
     <link href="MusicTheoryTrainerBlazor.styles.css" rel="stylesheet" />
+
+    <!-- Your overrides LAST -->
+    <link rel="stylesheet" href="css/app.css?v=26" />
 </head>
 
 <body>
-    <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
-    </div>
+<div id="app">
+    <svg class="loading-progress">
+        <circle r="40%" cx="50%" cy="50%" />
+        <circle r="40%" cx="50%" cy="50%" />
+    </svg>
+    <div class="loading-progress-text"></div>
+</div>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="." class="reload">Reload</a>
-        <span class="dismiss">🗙</span>
-    </div>
-    <script src="_framework/blazor.webassembly.js"></script>
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+<script>
+    window.tt = {
+        setAction: function (action) {
+            localStorage.setItem("tt_action", action);
+        },
+        popAction: function () {
+            const a = localStorage.getItem("tt_action");
+            localStorage.removeItem("tt_action");
+            return a;
+        },
+        scrollToId: function (id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
+</script>
+
+<script>
+    window.ttBook = {
+        attachSwipe: function (id, dotnetRef) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            let startX = 0;
+            let startY = 0;
+
+            el.addEventListener("touchstart", (e) => {
+                const t = e.touches[0];
+                startX = t.clientX;
+                startY = t.clientY;
+            }, { passive: true });
+
+            el.addEventListener("touchend", (e) => {
+                const t = e.changedTouches[0];
+                const dx = t.clientX - startX;
+                const dy = t.clientY - startY;
+
+                if (Math.abs(dx) > 55 && Math.abs(dy) < 45) {
+                    if (dx < 0) dotnetRef.invokeMethodAsync("Next");
+                    else dotnetRef.invokeMethodAsync("Prev");
+                }
+            }, { passive: true });
+        }
+    };
+</script>
+
+<script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>
