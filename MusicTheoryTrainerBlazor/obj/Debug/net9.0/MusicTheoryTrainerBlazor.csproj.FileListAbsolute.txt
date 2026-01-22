@@ -1114,10 +1114,10 @@ C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug
 C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\ym8k4j78mr-0nykj8zws3.gz
 C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\rw5eab0c8z-2zge47wec5.gz
 C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\8hws98y92p-z4sv5oz3fq.gz
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.eahdsg2xn5.wasm
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.4s0uxslo6h.pdb
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.eahdsg2xn5.wasm.gz
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.4s0uxslo6h.pdb.gz
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\8vjdtjnay9-eahdsg2xn5.gz
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\7mszq0hqkm-4s0uxslo6h.gz
-C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\gn32uzbh9e-efgde7qu9y.gz
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.gv2e7m37w8.wasm
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.urt4gmd8ez.pdb
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.gv2e7m37w8.wasm.gz
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\bin\Debug\net9.0\wwwroot\_framework\MusicTheoryTrainerBlazor.urt4gmd8ez.pdb.gz
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\8vjdtjnay9-gv2e7m37w8.gz
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\7mszq0hqkm-urt4gmd8ez.gz
+C:\Users\Ozzi\RiderProjects\music-theory-quiz\MusicTheoryTrainerBlazor\obj\Debug\net9.0\compressed\gn32uzbh9e-x1gsxc04wa.gz

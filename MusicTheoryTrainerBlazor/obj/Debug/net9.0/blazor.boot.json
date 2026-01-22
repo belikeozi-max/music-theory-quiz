@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "MusicTheoryTrainerBlazor",
   "resources": {
-    "hash": "sha256-BAO/FYUnzLDfzr9vbeDC+RqJTHogk9YgF22p08oS2Uw=",
+    "hash": "sha256-HNjmdpJ9GiW8JZnzx8XPtuN5+ztwGZW1Z4TSdJR8Xyk=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Authorization.j0mj4vhukl.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.h3xttq5c32.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -202,8 +202,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "MusicTheoryTrainerBlazor.eahdsg2xn5.wasm": "MusicTheoryTrainerBlazor.wasm",
-      "MusicTheoryTrainerBlazor.4s0uxslo6h.pdb": "MusicTheoryTrainerBlazor.pdb"
+      "MusicTheoryTrainerBlazor.gv2e7m37w8.wasm": "MusicTheoryTrainerBlazor.wasm",
+      "MusicTheoryTrainerBlazor.urt4gmd8ez.pdb": "MusicTheoryTrainerBlazor.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.xidrk0eo52.js": "sha256-OfGprhDb4vgzxzOBj9RRMcRnAdSZR0hH5g5LHA0MzIE="
@@ -414,10 +414,10 @@
       "WindowsBase.300iq62cmr.wasm": "sha256-gyJyeSLAns1YIwrPLmw2VAbNeQgpzgW5xIJovvySzEc=",
       "mscorlib.560m239brp.wasm": "sha256-XShGzkyhqE1Qwz15C0W5EDSl0wiqbw4NUP1UtzupbE4=",
       "netstandard.yg21u65s4h.wasm": "sha256-PjcsgKDGCmf1+ahJpjBZtaqHugXi6ZJaAVAkX0OzhaI=",
-      "MusicTheoryTrainerBlazor.eahdsg2xn5.wasm": "sha256-xtRwEWNVDxxnzp/0n6Re+XgbtxD8190I0VIM6gVuGo8="
+      "MusicTheoryTrainerBlazor.gv2e7m37w8.wasm": "sha256-9IqHrt/Ve13069oGBfc///AnOBlVeqvSfuR79jSoj+U="
     },
     "pdb": {
-      "MusicTheoryTrainerBlazor.4s0uxslo6h.pdb": "sha256-jJ+WWuXFDJv1mUNQQ2DQZkf6zGJ/MwG4JRS79uli8Ps="
+      "MusicTheoryTrainerBlazor.urt4gmd8ez.pdb": "sha256-umcnsov5ysNi5gy7M3iTPYoclo4kftnbHG+Z9exGdVE="
     }
   },
   "cacheBootResources": true,
