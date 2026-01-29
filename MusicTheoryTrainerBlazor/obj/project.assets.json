@@ -420,13 +420,13 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.12": {
+      "Microsoft.NET.ILLink.Tasks/9.0.6": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
-      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.12": {
+      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.6": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Sdk.WebAssembly.Pack.props": {},
@@ -876,13 +876,13 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.12": {
+      "Microsoft.NET.ILLink.Tasks/9.0.6": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
-      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.12": {
+      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.6": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Sdk.WebAssembly.Pack.props": {},
@@ -1700,10 +1700,10 @@
         "microsoft.jsinterop.webassembly.nuspec"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/9.0.12": {
-      "sha512": "StA3kyImQHqDo8A8ZHaSxgASbEuT5UIqgeCvK5SzUPj//xE1QSys421J9pEs4cYuIVwq7CJvWSKxtyH7aPr1LA==",
+    "Microsoft.NET.ILLink.Tasks/9.0.6": {
+      "sha512": "TXy3SbJzGXQbxxIxCjdrp8bwEyTDImyYNpTpd6v7P3JL2Y7dno8EYG7dPezfYTa5SoWKdhbH9cbnwHHs3BR5gA==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/9.0.12",
+      "path": "microsoft.net.illink.tasks/9.0.6",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1717,7 +1717,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.9.0.12.nupkg.sha512",
+        "microsoft.net.illink.tasks.9.0.6.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -1751,10 +1751,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.12": {
-      "sha512": "c3yi+Cd4xnmpcXOf5H2so5VFaYM2gI+FYVuQ5Q2g6Nyw9E1FHnJYMOlJkI1aPBHiC7/pkhW9sFg2xaS7lYEW7g==",
+    "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.6": {
+      "sha512": "0KAM0CWU4v1KbKdsyOAkqY3txcrvwVkgYkgRwCnKJS8so0B+O562YAUwDcok5YWC3qFK/+dBAwtn9KK1JL4Xrw==",
       "type": "package",
-      "path": "microsoft.net.sdk.webassembly.pack/9.0.12",
+      "path": "microsoft.net.sdk.webassembly.pack/9.0.6",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1785,7 +1785,7 @@
         "build/Microsoft.NET.Sdk.WebAssembly.Pack.targets",
         "build/Wasm.web.config",
         "build/browser.runtimeconfig.template.json",
-        "microsoft.net.sdk.webassembly.pack.9.0.12.nupkg.sha512",
+        "microsoft.net.sdk.webassembly.pack.9.0.6.nupkg.sha512",
         "microsoft.net.sdk.webassembly.pack.nuspec",
         "tools/net472/Microsoft.NET.Sdk.WebAssembly.Pack.Tasks.dll",
         "tools/net472/Microsoft.NET.WebAssembly.Webcil.dll",
@@ -1865,30 +1865,32 @@
     "net9.0": [
       "Microsoft.AspNetCore.Components.WebAssembly >= 9.0.12",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 9.0.12",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.12",
-      "Microsoft.NET.Sdk.WebAssembly.Pack >= 9.0.12",
+      "Microsoft.NET.ILLink.Tasks >= 9.0.6",
+      "Microsoft.NET.Sdk.WebAssembly.Pack >= 9.0.6",
       "Radzen.Blazor >= 8.6.5"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ozzi\\.nuget\\packages\\": {}
+    "/Users/juliandormon/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj",
+      "projectUniqueName": "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj",
       "projectName": "MusicTheoryTrainerBlazor",
-      "projectPath": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj",
-      "packagesPath": "C:\\Users\\Ozzi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\obj\\",
+      "projectPath": "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj",
+      "packagesPath": "/Users/juliandormon/.nuget/packages/",
+      "outputPath": "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Ozzi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/juliandormon/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "/Users/juliandormon/LocalNuGetRepo": {},
+        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1925,13 +1927,13 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.12, )",
+            "version": "[9.0.6, )",
             "autoReferenced": true
           },
           "Microsoft.NET.Sdk.WebAssembly.Pack": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.12, )",
+            "version": "[9.0.6, )",
             "autoReferenced": true
           },
           "Radzen.Blazor": {
@@ -1953,7 +1955,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-            "version": "[9.0.12, 9.0.12]"
+            "version": "[9.0.6, 9.0.6]"
           }
         ],
         "frameworkReferences": {
@@ -1961,7 +1963,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\Ozzi\\.dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

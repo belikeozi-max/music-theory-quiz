@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj": {}
+    "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj": {
+    "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj",
+        "projectUniqueName": "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj",
         "projectName": "MusicTheoryTrainerBlazor",
-        "projectPath": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\MusicTheoryTrainerBlazor.csproj",
-        "packagesPath": "C:\\Users\\Ozzi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ozzi\\RiderProjects\\music-theory-quiz\\MusicTheoryTrainerBlazor\\obj\\",
+        "projectPath": "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/MusicTheoryTrainerBlazor.csproj",
+        "packagesPath": "/Users/juliandormon/.nuget/packages/",
+        "outputPath": "/Users/juliandormon/RiderProjects/OziRiderProject/MusicTheoryTrainerBlazor/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Ozzi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/juliandormon/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "/Users/juliandormon/LocalNuGetRepo": {},
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -56,13 +58,13 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.12, )",
+              "version": "[9.0.6, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.12, )",
+              "version": "[9.0.6, )",
               "autoReferenced": true
             },
             "Radzen.Blazor": {
@@ -84,7 +86,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[9.0.12, 9.0.12]"
+              "version": "[9.0.6, 9.0.6]"
             }
           ],
           "frameworkReferences": {
@@ -92,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\Ozzi\\.dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
